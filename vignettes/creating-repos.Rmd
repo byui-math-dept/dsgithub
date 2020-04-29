@@ -1,0 +1,243 @@
+---
+title: "How to create class repos"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How to create class repos}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", eval = FALSE
+)
+```
+
+```{r setup}
+library(github335)
+library(googlesheets4)
+library(gh)
+library(RVerbalExpressions)
+library(tidyverse)
+library(stringr)
+```
+
+## Setting Up
+
+First we will need to define a few varaibles.
+
+```{r}
+semester_id <- "sp20"
+creator_email <- "hathawayj@gmail.com"
+### Will need to make a generic one ###
+google_sheet_githubnames <- "https://docs.google.com/spreadsheets/d/13aQsQYnGTQXyyBUGzE1V9MExEvG5woAmygtkdjltdjk/edit#gid=730524628"
+
+```
+
+Then fix a gh function and create a few more varaibles for the script
+
+```{r}
+semester_name <- str_c("student_", semester_id)
+ta_name <- str_c("ta_", semester_id)
+semester_id_upper <- str_to_upper(semester_id)
+
+```
+
+## Creating cohort information
+
+First create the ta and the student group for the semester. Then get the GitHub ids for each team.
+
+```{r}
+dwv_create_groups(semester_name = semester_name, ta_name = ta_name) 
+teams <- dwv_get_teams(semester_name = semester_name, ta_name = ta_name) 
+students_team_id <- pull(teams,students_team_id)
+ta_team_id <- pull(teams, ta_team_id)
+```
+
+## Updating with one new student
+
+We assume that a tibble object is created for the new student and that all groups have been created for the current semester.
+
+ - Student: Their name in First Last format with a space between first and last.
+ - BYUI Email: A BYU-I email. Although not used much in the process so it can be empty.
+ - gitName: The github username.
+ - description: The description you want to use with the new repo. Currently 'MCS 335 repository for [NAME] coursework'
+ - has_ghname: 
+ - name: The name of the github repo. Currently of this format. 'M335_SP20_[LASTNAME]_[FIRSTFEWOFFIRSTNAME]' 
+
+|Student    |BYUI Email         |gitName   |description                                  |has_ghname |name                 |
+|:----------|:------------------|:---------|:--------------------------------------------|:----------|:--------------------|
+|J Hathaway |hathawayj@byui.edu |hathawayj |MCS 335 repository for J Hathaway coursework |TRUE       |M335_SP20_Hathaway_J |
+
+```{r}
+one_student <- structure(list(Student = "J Hathaway", `BYUI Email` = "hathawayj@byui.edu", 
+    gitName = "hathawayj", description = "MCS 335 repository for J Hathaway coursework", 
+    has_ghname = TRUE, name = "M335_SP20_Hathaway_J"), class = c("tbl_df", 
+"tbl", "data.frame"), row.names = c(NA, -1L))
+```
+
+**Creating Issues:** If you are using GitHub for the students to manage their progress then you will need to create issues and push the tasks into them. It is built to pull informatin from an md file of the [following format](https://byuistats.github.io/M335/tasklist.md).
+
+```{r}
+body_lines = read_lines("https://byuistats.github.io/M335/tasklist.md")
+
+```
+
+Use the wrapper `dwv_one_student()` function with body_lines equal to `NULL` to not create the issues.
+
+```{r}
+dwv_one_student(one_student = one_student, class_group = "student_sp20",
+                ta_group = "ta_sp20", body_lines = body_lines)
+# dwv_delete_github("M335_SP20_Hathaway_J")
+  
+```
+Now run the process for one student using each of the functions.
+
+```{r}
+
+dwv_check_names(one_student)
+dwv_check_repos(one_student)
+
+dwv_copy_repo(one_student$name, one_student$description)
+team_ids <- dwv_get_teams(semester_name = "student_sp20", ta_name = "ta_sp20") 
+
+dwv_invite_group(one_student, pull(team_ids,students_team_id))
+dwv_add_student(one_student)
+dwv_add_group(one_student, "pull", pull(team_ids, students_team_id))
+dwv_add_group(one_student, "admin", pull(team_ids, ta_team_id))
+dwv_remove_watching(one_student) # run authenticad as user.
+dwv_team_repos(pull(team_ids, students_team_id))
+
+dwv_issue_cs(body_lines, dat = one_student)
+dwv_issue_tasks(body_lines, dat = one_student)
+dwv_issue_semester(body_lines, dat = one_student)
+
+```
+
+
+## Moving through a tibble of students
+
+
+### Creating Student Repos
+
+First, we need to have the table of student emails and GitHub usernames.
+
+```{r}
+#drive_auth(email = creator_email)
+gs4_auth(email = creator_email)
+mdf <- read_sheet(google_sheet_githubnames, sheet = semester_id_upper) %>%
+  mutate(Name = Name %>% str_trim() %>% str_remove_all("\\."),
+    `BYUI Email` = str_to_lower(`BYUI Email`) %>%
+      str_replace_all(rx() %>%
+                        rx_find("@") %>%
+                        rx_anything() %>%
+                        rx_end_of_line(), "@byui.edu")) %>%
+  select(Student = Name, `BYUI Email`, gitName = `GitHub Username`)
+
+```
+
+Then we have to check if their GitHub username exits.
+
+```{r}
+check_names <- dwv_check_names(mdf)
+has_ghname <- check_names$has_ghname
+git_students <- check_names$git_students
+```
+
+Now we build the table to create student repositories and check to see if the repos are created.
+
+
+```{r}
+## prepare a data frame to drive repo creation
+repo_create_df <- mdf %>%
+  mutate(description = paste("MCS 335 repository for", Student, "coursework"),
+         has_ghname = has_ghname,
+         # a bunch of code to build a repo id for each student
+         name = str_c("M335_", semester_id_upper, "_",
+                      Student %>% 
+                        str_split_fixed(" ", 2) %>% 
+                        .[,2] %>% 
+                        str_replace_all(" ", "_"),
+                      "_",
+                      Student %>% 
+                        str_split_fixed(" ", 2) %>% .[,1] %>% str_sub(1,4),
+                      sep = ""))
+
+oops <- dwv_check_repos(repo_create_df)
+
+```
+
+Now we create the GitHub repos for the new students that don't have a repository in their name and have a github username. 
+
+```{r}
+# 
+(repo_create_df_new <- repo_create_df %>% filter(has_ghname & oops))
+
+## This makes the repositories for each student
+
+# purrr::map(repo_create_df_new$name, dwv_delete_github)
+
+res <- purrr::map2(repo_create_df_new$name, repo_create_df_new$description, dwv_copy_repo)
+
+# old way if template functionality breaks.  
+# But this requires cloning the repos to your computer 
+# and then pushing all the files to the repos.
+# 
+#res <- purrr::map2(repo_create_df_new$name, repo_create_df_new$description, dwv_create_repo)
+
+# this status just creates 
+status <- repo_create_df_new %>%
+  mutate(cr_success = map_lgl(transpose(res)$result, Negate(is.null))) %>%
+  select(-description)
+
+```
+
+### Sharing and Permissions 
+
+Now invite the students to the team for this semester's class. You will need to invite the TAs to the ta group.  The TAs have read write priveledges.  The student group only has read permissions.
+
+```{r}
+dwv_invite_group(repo_create_df_new, students_team_id)
+dwv_add_student(repo_create_df_new)
+dwv_add_group(repo_create_df_new, "pull", students_team_id)
+dwv_add_group(repo_create_df_new, "admin", ta_team_id)
+dwv_remove_watching(repo_create_df_new) # run authenticad as user.
+dwv_team_repos(students_team_id)
+```
+Make sure to add TAs to TA group. Currently done manually [here](https://github.com/orgs/BYUI335/teams).
+
+
+### Creating Issues
+
+If you are using GitHub for the students to manage their progress then you will need to create issues and push the tasks into them. It is built to pull informatin from an md file of the [following format](https://byuistats.github.io/M335/tasklist.md).
+
+
+The below code will push issues to each repository provided in the tibble.
+
+
+```{r}
+body_lines = read_lines("https://byuistats.github.io/M335/tasklist.md")
+
+filter(repo_create_df_new, gitName == "hathawayj") %>%
+  dwv_issue_cs(body_lines, dat = .)
+filter(repo_create_df_new, gitName == "hathawayj") %>%
+  dwv_issue_tasks(body_lines, dat = .)
+filter(repo_create_df_new, gitName == "hathawayj") %>%
+  dwv_issue_semester(body_lines, dat = .)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
