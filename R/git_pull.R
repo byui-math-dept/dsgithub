@@ -2,7 +2,6 @@
 #' @param git_dir is the folder on your local computer where you store your git repositories
 #' @param group_dir is the folder for the GitHub group id.  It
 #' @param repo_use is the repository name for the clone
-#' @example git_clone(git_dir = "/Users/jhathaway/git", group_dir = "byuistats", repo_use = "datasciencedegree")
 #' @export
 
 git_clone <- function(git_dir, group_dir, repo_use){
@@ -17,7 +16,6 @@ git_clone <- function(git_dir, group_dir, repo_use){
 #' @param git_dir is the folder on your local computer where you store your git repositories
 #' @param group_dir is the folder for the GitHub group id.
 #' @param repo_use is the repository name for the pull
-#' @example git_pull(git_dir = "/Users/jhathaway/git", group_dir = "byuistats", repo_use = "datasciencedegree")
 #' @export
 
 git_pull <- function(git_dir, group_dir, repo_use){
@@ -34,7 +32,6 @@ git_pull <- function(git_dir, group_dir, repo_use){
 #' @param group_dir is the folder for the GitHub group id.
 #' @param repo_use is the repository name for the push
 #' @param message is the commit message to use
-#' @example git_pull(git_dir = "/Users/jhathaway/git", group_dir = "byuistats", repo_use = "datasciencedegree")
 #' @export
 
 git_push <- function(git_dir, group_dir, repo_use, message = "'First Push from Hathaway'"){
@@ -57,7 +54,6 @@ git_push <- function(git_dir, group_dir, repo_use, message = "'First Push from H
 #' @title List all Repos
 #' @param group_dir is the folder for the GitHub group id.
 #' @return a vector of repository names.  Can be used in `git_clone` and `git_pull`
-#' @example git_pull(git_dir = "/Users/jhathaway/git", group_dir = "byuistats", repo_use = "datasciencedegree")
 #' @export
 
 list_repos <- function(group_dir, org = TRUE){

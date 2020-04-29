@@ -1,6 +1,6 @@
 
 
-safe_gh <- purrr::safely(gh) # in purr package it makes it so code does not break on errors.
+safe_gh <- purrr::safely(gh::gh) # in purr package it makes it so code does not break on errors.
 
 
 dwv_check_names <- function(x) {
