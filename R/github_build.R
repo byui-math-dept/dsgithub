@@ -50,7 +50,8 @@ dwv_create_repo <- function(name, description) {
 
 dwv_copy_repo <- function(name, description) {
   safe_gh("POST /repos/BYUI335/M335_Template/generate", owner = "BYUI335",
-          name = name, description = description, .accept = "application/vnd.github.baptiste-preview+json")
+          name = name, description = description, private = TRUE,
+          .accept = "application/vnd.github.baptiste-preview+json")
 }
 
 #' @title Github Repo Delete
