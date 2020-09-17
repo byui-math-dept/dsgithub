@@ -28,10 +28,10 @@ library(stringr)
 First we will need to define a few varaibles.
 
 ```{r}
-semester_id <- "sp20"
+semester_id <- "Test20"
 creator_email <- "hathawayj@gmail.com"
-### Will need to make a generic one ###
-google_sheet_githubnames <- "https://docs.google.com/spreadsheets/d/13aQsQYnGTQXyyBUGzE1V9MExEvG5woAmygtkdjltdjk/edit#gid=730524628"
+
+google_sheet_githubnames <- "https://docs.google.com/spreadsheets/d/1TB_adLB9cNopQo0JLXfaCxtBW7abibIEmqYopqT-AAI/edit?usp=sharing"
 
 ```
 
@@ -51,7 +51,7 @@ First create the ta and the student group for the semester. Then get the GitHub 
 ```{r}
 dwv_create_groups(semester_name = semester_name, ta_name = ta_name) 
 teams <- dwv_get_teams(semester_name = semester_name, ta_name = ta_name) 
-students_team_id <- pull(teams,students_team_id)
+students_team_id <- pull(teams, students_team_id)
 ta_team_id <- pull(teams, ta_team_id)
 ```
 
@@ -72,8 +72,8 @@ We assume that a tibble object is created for the new student and that all group
 
 ```{r}
 one_student <- structure(list(Student = "J Hathaway", `BYUI Email` = "hathawayj@byui.edu", 
-    gitName = "hathawayj", description = "MCS 335 repository for J Hathaway coursework", 
-    has_ghname = TRUE, name = "M335_SP20_Hathaway_J"), class = c("tbl_df", 
+    gitName = "hathawayj", description = "MCS 335 TEST repository for J Hathaway coursework", 
+    has_ghname = TRUE, name = "M335_TEST20_Hathaway_J"), class = c("tbl_df", 
 "tbl", "data.frame"), row.names = c(NA, -1L))
 ```
 
@@ -87,11 +87,16 @@ body_lines = read_lines("https://byuistats.github.io/M335/tasklist.md")
 Use the wrapper `dwv_one_student()` function with body_lines equal to `NULL` to not create the issues.
 
 ```{r}
-dwv_one_student(one_student = one_student, class_group = "student_sp20",
-                ta_group = "ta_sp20", body_lines = body_lines)
-# dwv_delete_github("M335_SP20_Hathaway_J")
+dwv_one_student(one_student = one_student, class_group = "student_Test20",
+                ta_group = "ta_Test20", body_lines = body_lines)
+# dwv_delete_github("M335_Test20_Hathaway_J")
   
 ```
+
+```{r, echo=FALSE}
+dwv_delete_github("M335_TEST20_Hathaway_J")
+```
+
 Now run the process for one student using each of the functions.
 
 ```{r}
@@ -100,7 +105,7 @@ dwv_check_names(one_student)
 dwv_check_repos(one_student)
 
 dwv_copy_repo(one_student$name, one_student$description)
-team_ids <- dwv_get_teams(semester_name = "student_sp20", ta_name = "ta_sp20") 
+team_ids <- dwv_get_teams(semester_name = "student_Test20", ta_name = "ta_Test20") 
 
 dwv_invite_group(one_student, pull(team_ids,students_team_id))
 dwv_add_student(one_student)
@@ -113,6 +118,11 @@ dwv_issue_cs(body_lines, dat = one_student)
 dwv_issue_tasks(body_lines, dat = one_student)
 dwv_issue_semester(body_lines, dat = one_student)
 
+```
+
+
+```{r, echo=FALSE}
+dwv_delete_github("M335_TEST20_Hathaway_J")
 ```
 
 
@@ -230,6 +240,9 @@ filter(repo_create_df_new, gitName == "hathawayj") %>%
 ```
 
 
+```{r, echo=FALSE}
+dwv_delete_github("M335_TEST20_Hathaway_J")
+```
 
 
 

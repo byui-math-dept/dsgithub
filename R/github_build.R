@@ -12,7 +12,7 @@ dwv_check_names <- function(x) {
 
   ("Names that are missing github account username")
   has_ghname <- res$error %>% map_lgl(is.null)
-  print(mdf[!has_ghname,])
+  print(x[!has_ghname,])
   # https://simonsmith.github.io/github-user-search/#/search
 
   print("Send these people an email.")

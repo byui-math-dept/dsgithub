@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">github335</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -76,7 +76,7 @@
 
       
 
-      </header><script src="creating-repos_files/header-attrs-2.1.2/header-attrs.js"></script><div class="row">
+      </header><script src="creating-repos_files/header-attrs-2.3.5/header-attrs.js"></script><script src="creating-repos_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>How to create class repos</h1>
@@ -99,10 +99,10 @@
 <h2 class="hasAnchor">
 <a href="#setting-up" class="anchor"></a>Setting Up</h2>
 <p>First we will need to define a few varaibles.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>semester_id &lt;-<span class="st"> "sp20"</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>semester_id &lt;-<span class="st"> "Test20"</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>creator_email &lt;-<span class="st"> "hathawayj@gmail.com"</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="co">### Will need to make a generic one </span><span class="al">###</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>google_sheet_githubnames &lt;-<span class="st"> "https://docs.google.com/spreadsheets/d/13aQsQYnGTQXyyBUGzE1V9MExEvG5woAmygtkdjltdjk/edit#gid=730524628"</span></span></code></pre></div>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a>google_sheet_githubnames &lt;-<span class="st"> "https://docs.google.com/spreadsheets/d/1TB_adLB9cNopQo0JLXfaCxtBW7abibIEmqYopqT-AAI/edit?usp=sharing"</span></span></code></pre></div>
 <p>Then fix a gh function and create a few more varaibles for the script</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>semester_name &lt;-<span class="st"> </span><span class="kw"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span>(<span class="st">"student_"</span>, semester_id)</span>
 <span id="cb3-2"><a href="#cb3-2"></a>ta_name &lt;-<span class="st"> </span><span class="kw"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span>(<span class="st">"ta_"</span>, semester_id)</span>
@@ -114,7 +114,7 @@
 <p>First create the ta and the student group for the semester. Then get the GitHub ids for each team.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">dwv_create_groups</span>(<span class="dt">semester_name =</span> semester_name, <span class="dt">ta_name =</span> ta_name) </span>
 <span id="cb4-2"><a href="#cb4-2"></a>teams &lt;-<span class="st"> </span><span class="kw">dwv_get_teams</span>(<span class="dt">semester_name =</span> semester_name, <span class="dt">ta_name =</span> ta_name) </span>
-<span id="cb4-3"><a href="#cb4-3"></a>students_team_id &lt;-<span class="st"> </span><span class="kw">pull</span>(teams,students_team_id)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>students_team_id &lt;-<span class="st"> </span><span class="kw">pull</span>(teams, students_team_id)</span>
 <span id="cb4-4"><a href="#cb4-4"></a>ta_team_id &lt;-<span class="st"> </span><span class="kw">pull</span>(teams, ta_team_id)</span></code></pre></div>
 </div>
 <div id="updating-with-one-new-student" class="section level2">
@@ -156,15 +156,15 @@
 </tr></tbody>
 </table>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>one_student &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/structure.html">structure</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">Student =</span> <span class="st">"J Hathaway"</span>, <span class="st">`</span><span class="dt">BYUI Email</span><span class="st">`</span> =<span class="st"> "hathawayj@byui.edu"</span>, </span>
-<span id="cb5-2"><a href="#cb5-2"></a>    <span class="dt">gitName =</span> <span class="st">"hathawayj"</span>, <span class="dt">description =</span> <span class="st">"MCS 335 repository for J Hathaway coursework"</span>, </span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="dt">has_ghname =</span> <span class="ot">TRUE</span>, <span class="dt">name =</span> <span class="st">"M335_SP20_Hathaway_J"</span>), <span class="dt">class =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"tbl_df"</span>, </span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="dt">gitName =</span> <span class="st">"hathawayj"</span>, <span class="dt">description =</span> <span class="st">"MCS 335 TEST repository for J Hathaway coursework"</span>, </span>
+<span id="cb5-3"><a href="#cb5-3"></a>    <span class="dt">has_ghname =</span> <span class="ot">TRUE</span>, <span class="dt">name =</span> <span class="st">"M335_TEST20_Hathaway_J"</span>), <span class="dt">class =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"tbl_df"</span>, </span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="st">"tbl"</span>, <span class="st">"data.frame"</span>), <span class="dt">row.names =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="ot">NA</span>, <span class="op">-</span>1L))</span></code></pre></div>
 <p><strong>Creating Issues:</strong> If you are using GitHub for the students to manage their progress then you will need to create issues and push the tasks into them. It is built to pull informatin from an md file of the <a href="https://byuistats.github.io/M335/tasklist.md">following format</a>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>body_lines =<span class="st"> </span><span class="kw">read_lines</span>(<span class="st">"https://byuistats.github.io/M335/tasklist.md"</span>)</span></code></pre></div>
 <p>Use the wrapper <code>dwv_one_student()</code> function with body_lines equal to <code>NULL</code> to not create the issues.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">dwv_one_student</span>(<span class="dt">one_student =</span> one_student, <span class="dt">class_group =</span> <span class="st">"student_sp20"</span>,</span>
-<span id="cb7-2"><a href="#cb7-2"></a>                <span class="dt">ta_group =</span> <span class="st">"ta_sp20"</span>, <span class="dt">body_lines =</span> body_lines)</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="co"># dwv_delete_github("M335_SP20_Hathaway_J")</span></span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">dwv_one_student</span>(<span class="dt">one_student =</span> one_student, <span class="dt">class_group =</span> <span class="st">"student_Test20"</span>,</span>
+<span id="cb7-2"><a href="#cb7-2"></a>                <span class="dt">ta_group =</span> <span class="st">"ta_Test20"</span>, <span class="dt">body_lines =</span> body_lines)</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co"># dwv_delete_github("M335_Test20_Hathaway_J")</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a>  </span></code></pre></div>
 <p>Now run the process for one student using each of the functions.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a></span>
@@ -172,7 +172,7 @@
 <span id="cb8-3"><a href="#cb8-3"></a><span class="kw">dwv_check_repos</span>(one_student)</span>
 <span id="cb8-4"><a href="#cb8-4"></a></span>
 <span id="cb8-5"><a href="#cb8-5"></a><span class="kw">dwv_copy_repo</span>(one_student<span class="op">$</span>name, one_student<span class="op">$</span>description)</span>
-<span id="cb8-6"><a href="#cb8-6"></a>team_ids &lt;-<span class="st"> </span><span class="kw">dwv_get_teams</span>(<span class="dt">semester_name =</span> <span class="st">"student_sp20"</span>, <span class="dt">ta_name =</span> <span class="st">"ta_sp20"</span>) </span>
+<span id="cb8-6"><a href="#cb8-6"></a>team_ids &lt;-<span class="st"> </span><span class="kw">dwv_get_teams</span>(<span class="dt">semester_name =</span> <span class="st">"student_Test20"</span>, <span class="dt">ta_name =</span> <span class="st">"ta_Test20"</span>) </span>
 <span id="cb8-7"><a href="#cb8-7"></a></span>
 <span id="cb8-8"><a href="#cb8-8"></a><span class="kw"><a href="../reference/dwv_invite_group.html">dwv_invite_group</a></span>(one_student, <span class="kw">pull</span>(team_ids,students_team_id))</span>
 <span id="cb8-9"><a href="#cb8-9"></a><span class="kw"><a href="../reference/dwv_add_student.html">dwv_add_student</a></span>(one_student)</span>
@@ -292,7 +292,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by The package maintainer.</p>
+  <p>Developed by J. Hathaway.</p>
 </div>
 
 <div class="pkgdown">

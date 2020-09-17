@@ -40,6 +40,8 @@ dwv_issue_tasks <- function(x = body_lines, task_title = "Daily Class Tasks",
 
 dwv_issue_semester <- function(x = body_lines, dat = repo_create_df_new) {
   start_semdel <- x %>% str_which("## Semester Deliverables")
+  start_cs <- x %>% str_which("## Weekly Case Studies")
+
   semdel_title <- x[start_semdel] %>% str_remove("## ")
   semdel_lines <- x[start_semdel:(start_cs - 1)] %>%
     replace_links("weekly_projects/", "https://byuistats.github.io/M335/weekly_projects/") %>%
