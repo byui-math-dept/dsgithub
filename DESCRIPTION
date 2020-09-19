@@ -1,7 +1,7 @@
 Package: github335
 Type: Package
 Title: Builds Repositories for M335
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: person("J.", "Hathaway", email = "j@jhathaway.io", role = c("aut","cre"))
 Description: We use these scripts to build the repos for students in M335.  It is draft right now.
 License: MIT + file LICENSE
