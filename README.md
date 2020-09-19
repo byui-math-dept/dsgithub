@@ -11,7 +11,7 @@ The goal of github335 is to ...
 You can install the released version of github335 from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("github335")
+devtools::install_github('hathawayj/github335')
 ```
 
 ## Example
