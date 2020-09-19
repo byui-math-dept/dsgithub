@@ -2,6 +2,8 @@
 
 export("%>%")
 export(dwv_delete_github)
+export(dwv_one_student)
+export(dwv_one_student_issues)
 export(git_clone)
 export(git_pull)
 export(git_push)

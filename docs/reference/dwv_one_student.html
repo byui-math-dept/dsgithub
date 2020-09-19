@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • github335</title>
+<title>Function to create repo and connect them to group plus push issues — dwv_one_student • github335</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Function to create repo and connect them to group plus push issues — dwv_one_student" />
+<meta property="og:description" content="Function to create repo and connect them to group plus push issues" />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -117,96 +118,42 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Function to create repo and connect them to group plus push issues</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hathawayj/github335/blob/master/R/dwv_one_student.R'><code>R/dwv_one_student.R</code></a></small>
+    <div class="hidden name"><code>dwv_one_student.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Function to create repo and connect them to group plus push issues</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>dwv_one_student</span>(<span class='kw'>one_student</span>, <span class='kw'>class_group</span>, <span class='kw'>ta_group</span>, body_lines = <span class='kw'>NULL</span>)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="dwv_add_student.html">dwv_add_student()</a></code> </p>
-        </td>
-        <td><p>Give students r/w access to their repository</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dwv_delete_github.html">dwv_delete_github()</a></code> </p>
-        </td>
-        <td><p>Github Repo Delete</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dwv_invite_group.html">dwv_invite_group()</a></code> </p>
-        </td>
-        <td><p>Invite missing to the team.  They should get an email.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dwv_one_student.html">dwv_one_student()</a></code> </p>
-        </td>
-        <td><p>Function to create repo and connect them to group plus push issues</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dwv_one_student_issues.html">dwv_one_student_issues()</a></code> </p>
-        </td>
-        <td><p>Function to create issues</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="git_clone.html">git_clone()</a></code> </p>
-        </td>
-        <td><p>Clone Repo</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="git_pull.html">git_pull()</a></code> </p>
-        </td>
-        <td><p>Pull Latest from Repo</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="git_push.html">git_push()</a></code> </p>
-        </td>
-        <td><p>Commit and Push Latest Updates to Repo</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hello.html">hello()</a></code> </p>
-        </td>
-        <td><p>Hello, World!</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="list_repos.html">list_repos()</a></code> </p>
-        </td>
-        <td><p>List all Repos</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>class_group</th>
+      <td><p>the name of the class group for that semester.</p></td>
+    </tr>
+    <tr>
+      <th>ta_group</th>
+      <td><p>the name of the TA group for that semester.</p></td>
+    </tr>
+    <tr>
+      <th>body_lines</th>
+      <td><p>is the MarkDown file with a predefined format</p></td>
+    </tr>
+    <tr>
+      <th>one_stdent</th>
+      <td><p>is a tibble with all the information for one person</p></td>
+    </tr>
     </table>
-  </div>
 
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
