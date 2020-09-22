@@ -160,6 +160,8 @@ dwv_remove_watching <- function(x, username = "hathawayj") {
 }
 
 ## look at all the repos associated with this team
+#' Find repos with the team
+#' @export
 dwv_team_repos <- function(team_id) {
   res <- gh("/teams/:id/repos", id = team_id, .limit = 100)
   res %>% map_chr("name")
