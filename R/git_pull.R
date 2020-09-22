@@ -3,7 +3,6 @@
 #' @param group_dir is the folder for the GitHub group id.  It
 #' @param repo_use is the repository name for the clone
 #' @export
-
 git_clone <- function(git_dir, group_dir, repo_use){
 
   folder_dir <- file.path(git_dir, group_dir, repo_use)
@@ -17,7 +16,6 @@ git_clone <- function(git_dir, group_dir, repo_use){
 #' @param group_dir is the folder for the GitHub group id.
 #' @param repo_use is the repository name for the pull
 #' @export
-
 git_pull <- function(git_dir, group_dir, repo_use){
 
   #git --git-dir=/Users/jhathaway/git/byuistats/datasciencedegree/.git
@@ -33,7 +31,6 @@ git_pull <- function(git_dir, group_dir, repo_use){
 #' @param repo_use is the repository name for the push
 #' @param message is the commit message to use
 #' @export
-
 git_push <- function(git_dir, group_dir, repo_use, message = "'First Push from Hathaway'"){
 
   folder_dir <- file.path(git_dir, group_dir, repo_use)
@@ -55,7 +52,6 @@ git_push <- function(git_dir, group_dir, repo_use, message = "'First Push from H
 #' @param group_dir is the folder for the GitHub group id.
 #' @return a vector of repository names.  Can be used in `git_clone` and `git_pull`
 #' @export
-
 list_repos <- function(group_dir, org = TRUE){
 
   # "Generate new token". Give it a nickname that reminds you of the intended purpose, e.g., "devtools".

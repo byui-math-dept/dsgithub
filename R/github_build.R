@@ -2,7 +2,8 @@
 
 safe_gh <- purrr::safely(gh::gh) # in purr package it makes it so code does not break on errors.
 
-
+#' Check of their name exists
+#' @export
 dwv_check_names <- function(x) {
   ## ping the usernames
   ## the safe_gh will protect for bad github usernames
@@ -23,7 +24,8 @@ dwv_check_names <- function(x) {
   list(has_ghname = has_ghname, git_students = git_students)
 }
 
-
+#' Check if the repo exists
+#' @export
 dwv_check_repos <- function(x) {
   ## find out which repos already exist
   res <- map(x$name,
@@ -41,13 +43,15 @@ dwv_check_repos <- function(x) {
 
 }
 
-
-
+#' Create the repo
+#' @export
 dwv_create_repo <- function(name, description) {
   safe_gh("POST /orgs/BYUI335/repos", name = name, description = description,
           private = TRUE, has_wiki = FALSE, auto_init = TRUE)
 }
 
+#' Copy from template repo
+#' @export
 dwv_copy_repo <- function(name, description) {
   safe_gh("POST /repos/BYUI335/M335_Template/generate", owner = "BYUI335",
           name = name, description = description, private = TRUE,
@@ -68,7 +72,8 @@ dwv_delete_github <- function(repo_name, owner_name = "BYUI335") {
 ###########################   First Time  ###############################
 
 ## create the students team for first time
-
+#' Create the groups for the semester
+#' @export
 dwv_create_groups <- function(semester_name, ta_name) {
   gh("POST /orgs/BYUI335/teams", name = semester_name,
      description = "Students in BYU-I MCS 335")
@@ -76,6 +81,8 @@ dwv_create_groups <- function(semester_name, ta_name) {
      description = "TAs in BYU-I MCS 335")
 }
 
+#' Create team for the semester
+#' @export
 dwv_get_teams <- function(semester_name, ta_name) {
   teams <- gh("/orgs/BYUI335/teams")
 
@@ -101,6 +108,7 @@ dwv_get_teams <- function(semester_name, ta_name) {
 
 
 #' @title Invite missing to the team.  They should get an email.
+#' @export
 dwv_invite_group <- function(x, students_team_id) {
   missing <- x$gitName
   res <- map(missing,
@@ -121,6 +129,7 @@ dwv_invite_group <- function(x, students_team_id) {
 
 #' @title Give students r/w access to their repository
 #' @note https://developer.github.com/v3/repos/collaborators/#add-user-as-a-collaborator
+#' @export
 dwv_add_student <- function(x) {
   res <- map2(x$name, x$gitName,
               ~ safe_gh("PUT /repos/BYUI335/:repo/collaborators/:username",
@@ -131,6 +140,8 @@ dwv_add_student <- function(x) {
 
 ## give the student team read access to these repos.
 ## Now every student in the category can see all repositories
+#' Add group
+#' @export
 dwv_add_group <- function(x, perms = "pull", team_id = students_team_id) {
   res <- purrr::map(x$name, ~safe_gh("PUT /teams/:id/repos/BYUI335/:repo",
                        id = team_id, repo = .x, permission = perms))
@@ -139,7 +150,8 @@ dwv_add_group <- function(x, perms = "pull", team_id = students_team_id) {
 
 }
 ## This removes the a user from getting notified of all the changes made to the repositorys.
-
+#' Remove user from watching the repo
+#' @export
 dwv_remove_watching <- function(x, username = "hathawayj") {
   res <- map(x$name,
              ~ safe_gh("DELETE /repos/:owner/:repo/subscription",

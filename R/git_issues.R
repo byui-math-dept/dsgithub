@@ -25,7 +25,8 @@ post_issue_tasks <- function(x, repo_create_df_new, x_title){
 # https://developer.github.com/v3/issues/
 # https://developer.github.com/v3/issues/comments/#create-a-comment
 # body_lines = read_lines("https://byuistats.github.io/M335/tasklist.md")
-
+#' Create task issues
+#' @export
 dwv_issue_tasks <- function(x = body_lines, task_title = "Daily Class Tasks",
                             dat = repo_create_df_new) {
 
@@ -38,6 +39,8 @@ dwv_issue_tasks <- function(x = body_lines, task_title = "Daily Class Tasks",
 
 }
 
+#' Create Semester Issues
+#' @export
 dwv_issue_semester <- function(x = body_lines, dat = repo_create_df_new) {
   start_semdel <- x %>% str_which("## Semester Deliverables")
   start_cs <- x %>% str_which("## Weekly Case Studies")
@@ -53,6 +56,8 @@ dwv_issue_semester <- function(x = body_lines, dat = repo_create_df_new) {
 
 }
 
+#' Create Case Study issues
+#' @export
 dwv_issue_cs <- function(x, n_cs = 13, print = FALSE, dat = repo_create_df_new) {
 
   start_cs <-   x %>% str_which("## Weekly Case Studies")
