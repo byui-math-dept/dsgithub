@@ -91,37 +91,38 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/hathawayj/github335">github335</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">googlesheets4</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/r-lib/gh#readme">gh</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/tyluRp/RVerbalExpressions">RVerbalExpressions</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://stringr.tidyverse.org">stringr</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/tyluRp/RVerbalExpressions">RVerbalExpressions</a></span>)
 </pre></div>
 <div id="setting-up" class="section level2">
 <h2 class="hasAnchor">
 <a href="#setting-up" class="anchor"></a>Setting Up</h2>
-<p>First we will need to define a few varaibles.</p>
+<p>First we will need to define a few variables that will help us when we are using the functions below.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">semester_id</span> <span class="op">&lt;-</span> <span class="st">"Test20"</span>
-<span class="kw">creator_email</span> <span class="op">&lt;-</span> <span class="st">"hathawayj@gmail.com"</span>
+<span class="kw">semester_id</span> <span class="op">&lt;-</span> <span class="st">"Test20"</span> <span class="co"># fa20, sp20, wi20</span>
+<span class="kw">creator_email</span> <span class="op">&lt;-</span> <span class="st">"hathawayj@gmail.com"</span> <span class="co"># The email that has access to google docs.</span>
 
-<span class="kw">google_sheet_githubnames</span> <span class="op">&lt;-</span> <span class="st">"https://docs.google.com/spreadsheets/d/1TB_adLB9cNopQo0JLXfaCxtBW7abibIEmqYopqT-AAI/edit?usp=sharing"</span>
-</pre></div>
-<p>Then fix a gh function and create a few more varaibles for the script</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="kw">semester_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span>(<span class="st">"student_"</span>, <span class="kw">semester_id</span>)
 <span class="kw">ta_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span>(<span class="st">"ta_"</span>, <span class="kw">semester_id</span>)
 <span class="kw">semester_id_upper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_upper</a></span>(<span class="kw">semester_id</span>)
+
+<span class="kw">google_sheet_githubnames</span> <span class="op">&lt;-</span> <span class="st">"https://docs.google.com/spreadsheets/d/1TB_adLB9cNopQo0JLXfaCxtBW7abibIEmqYopqT-AAI/edit?usp=sharing"</span>
 </pre></div>
 </div>
 <div id="creating-cohort-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#creating-cohort-information" class="anchor"></a>Creating cohort information</h2>
 <p>First create the ta and the student group for the semester. Then get the GitHub ids for each team.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
+<div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="fu"><a href="../reference/dwv_create_groups.html">dwv_create_groups</a></span>(semester_name = <span class="kw">semester_name</span>, ta_name = <span class="kw">ta_name</span>) 
+
 <span class="kw">teams</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dwv_get_teams.html">dwv_get_teams</a></span>(semester_name = <span class="kw">semester_name</span>, ta_name = <span class="kw">ta_name</span>) 
+
 <span class="kw">students_team_id</span> <span class="op">&lt;-</span> <span class="fu">pull</span>(<span class="kw">teams</span>, <span class="kw">students_team_id</span>)
+
 <span class="kw">ta_team_id</span> <span class="op">&lt;-</span> <span class="fu">pull</span>(<span class="kw">teams</span>, <span class="kw">ta_team_id</span>)
 </pre></div>
 </div>
@@ -129,13 +130,24 @@
 <h2 class="hasAnchor">
 <a href="#updating-with-one-new-student" class="anchor"></a>Updating with one new student</h2>
 <p>We assume that a tibble object is created for the new student and that all groups have been created for the current semester.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="kw">one_student</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html">structure</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(Student = <span class="st">"J Hathaway"</span>, `BYUI Email` = <span class="st">"hathawayj@byui.edu"</span>, 
+    gitName = <span class="st">"hathawayj"</span>, description = <span class="st">"MCS 335 TEST repository for J Hathaway coursework"</span>, 
+    has_ghname = <span class="fl">TRUE</span>, name = <span class="st">"M335_TEST20_Hathaway_J"</span>), class = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"tbl_df"</span>, 
+<span class="st">"tbl"</span>, <span class="st">"data.frame"</span>), row.names = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">NA</span>, <span class="op">-</span><span class="fl">1L</span>))
+</pre></div>
 <ul>
-<li>Student: Their name in First Last format with a space between first and last.</li>
-<li>BYUI Email: A BYU-I email. Although not used much in the process so it can be empty.</li>
-<li>gitName: The github username.</li>
-<li>description: The description you want to use with the new repo. Currently ‘MCS 335 repository for [NAME] coursework’</li>
-<li>has_ghname:</li>
-<li>name: The name of the github repo. Currently of this format. ’M335_SP20_[LASTNAME]_[FIRSTFEWOFFIRSTNAME]’</li>
+<li>
+<strong>Student:</strong> Their name in First Last format with a space between first and last.</li>
+<li>
+<strong>BYUI Email:</strong> A BYU-I email. Although not used much in the process so it can be empty.</li>
+<li>
+<strong>gitName:</strong> The github username.</li>
+<li>
+<strong>description:</strong> The description you want to use with the new repo. Currently ‘MCS 335 repository for [NAME] coursework’</li>
+<li><strong>has_ghname:</strong></li>
+<li>
+<strong>name:</strong> The name of the github repo. Currently of this format. ’M335_SP20_[LASTNAME]_[FIRSTFEWOFFIRSTNAME]’</li>
 </ul>
 <table class="table">
 <colgroup>
@@ -163,25 +175,22 @@
 <td align="left">M335_SP20_Hathaway_J</td>
 </tr></tbody>
 </table>
+<p><strong>Creating Issues:</strong> If you are using GitHub for the students to manage their progress then you will need to create issues and push the tasks into them. It is built to pull information from an md file of the <a href="https://byuistats.github.io/M335/tasklist.md">following format</a>.</p>
+<p>Use the wrapper <code><a href="../reference/dwv_one_student.html">dwv_one_student()</a></code> function with the <code>body_lines</code> argument set to <code>NULL</code> and no issues will be created for the student.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw">one_student</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html">structure</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(Student = <span class="st">"J Hathaway"</span>, `BYUI Email` = <span class="st">"hathawayj@byui.edu"</span>, 
-    gitName = <span class="st">"hathawayj"</span>, description = <span class="st">"MCS 335 TEST repository for J Hathaway coursework"</span>, 
-    has_ghname = <span class="fl">TRUE</span>, name = <span class="st">"M335_TEST20_Hathaway_J"</span>), class = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"tbl_df"</span>, 
-<span class="st">"tbl"</span>, <span class="st">"data.frame"</span>), row.names = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">NA</span>, <span class="op">-</span><span class="fl">1L</span>))
-</pre></div>
-<p><strong>Creating Issues:</strong> If you are using GitHub for the students to manage their progress then you will need to create issues and push the tasks into them. It is built to pull informatin from an md file of the <a href="https://byuistats.github.io/M335/tasklist.md">following format</a>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
+
 <span class="kw">body_lines</span> <span class="op">=</span> <span class="fu">read_lines</span>(<span class="st">"https://byuistats.github.io/M335/tasklist.md"</span>)
 </pre></div>
-<p>Use the wrapper <code><a href="../reference/dwv_one_student.html">dwv_one_student()</a></code> function with body_lines equal to <code>NULL</code> to not create the issues.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
+<div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="fu"><a href="../reference/dwv_one_student.html">dwv_one_student</a></span>(one_student = <span class="kw">one_student</span>, class_group = <span class="st">"student_Test20"</span>,
                 ta_group = <span class="st">"ta_Test20"</span>, body_lines = <span class="kw">body_lines</span>)
+
+<span class="co"># You can delete a repo using the following commented function</span>
 <span class="co"># dwv_delete_github("M335_Test20_Hathaway_J")</span>
   
 </pre></div>
-<p>Now run the process for one student using each of the functions.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
+<p>The <code><a href="../reference/dwv_one_student.html">dwv_one_student()</a></code> function simply works throught the following functions in the package in the order listed. You can run them individually if you prefer.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit">
 
 <span class="fu"><a href="../reference/dwv_check_names.html">dwv_check_names</a></span>(<span class="kw">one_student</span>)
 <span class="fu"><a href="../reference/dwv_check_repos.html">dwv_check_repos</a></span>(<span class="kw">one_student</span>)
@@ -204,11 +213,12 @@
 <div id="moving-through-a-tibble-of-students" class="section level2">
 <h2 class="hasAnchor">
 <a href="#moving-through-a-tibble-of-students" class="anchor"></a>Moving through a tibble of students</h2>
+<p>The following code examples use <code>purrr</code> to move through a full table of students.</p>
 <div id="creating-student-repos" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-student-repos" class="anchor"></a>Creating Student Repos</h3>
-<p>First, we need to have the table of student emails and GitHub usernames.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
+<p>First, we need to have the table of student emails and GitHub usernames. It is hard coded to use the google sheet column names above.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit">
 <span class="co">#drive_auth(email = creator_email)</span>
 <span class="fu">gs4_auth</span>(email = <span class="kw">creator_email</span>)
 <span class="kw">mdf</span> <span class="op">&lt;-</span> <span class="fu">read_sheet</span>(<span class="kw">google_sheet_githubnames</span>, sheet = <span class="kw">semester_id_upper</span>) <span class="op">%&gt;%</span>
@@ -220,14 +230,14 @@
                         <span class="fu"><a href="https://rdrr.io/pkg/RVerbalExpressions/man/rx_end_of_line.html">rx_end_of_line</a></span>(), <span class="st">"@byui.edu"</span>)) <span class="op">%&gt;%</span>
   <span class="fu">select</span>(Student = <span class="kw">Name</span>, <span class="kw">`BYUI Email`</span>, gitName = <span class="kw">`GitHub Username`</span>)
 </pre></div>
-<p>Then we have to check if their GitHub username exits.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
+<p>Then we have to check if their GitHub username exists.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="kw">check_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dwv_check_names.html">dwv_check_names</a></span>(<span class="kw">mdf</span>)
 <span class="kw">has_ghname</span> <span class="op">&lt;-</span> <span class="kw">check_names</span><span class="op">$</span><span class="kw">has_ghname</span>
 <span class="kw">git_students</span> <span class="op">&lt;-</span> <span class="kw">check_names</span><span class="op">$</span><span class="kw">git_students</span>
 </pre></div>
 <p>Now we build the table to create student repositories and check to see if the repos are created.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
+<div class="sourceCode" id="cb10"><pre class="downlit">
 <span class="co">## prepare a data frame to drive repo creation</span>
 <span class="kw">repo_create_df</span> <span class="op">&lt;-</span> <span class="kw">mdf</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span>(description = <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"MCS 335 repository for"</span>, <span class="kw">Student</span>, <span class="st">"coursework"</span>),
@@ -246,7 +256,7 @@
 <span class="kw">oops</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dwv_check_repos.html">dwv_check_repos</a></span>(<span class="kw">repo_create_df</span>)
 </pre></div>
 <p>Now we create the GitHub repos for the new students that don’t have a repository in their name and have a github username.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
+<div class="sourceCode" id="cb11"><pre class="downlit">
 <span class="co"># </span>
 (<span class="kw">repo_create_df_new</span> <span class="op">&lt;-</span> <span class="kw">repo_create_df</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="kw">has_ghname</span> <span class="op">&amp;</span> <span class="kw">oops</span>))
 
@@ -256,13 +266,7 @@
 
 <span class="kw">res</span> <span class="op">&lt;-</span> <span class="kw">purrr</span>::<span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">map2</a></span>(<span class="kw">repo_create_df_new</span><span class="op">$</span><span class="kw">name</span>, <span class="kw">repo_create_df_new</span><span class="op">$</span><span class="kw">description</span>, <span class="kw">dwv_copy_repo</span>)
 
-<span class="co"># old way if template functionality breaks.  </span>
-<span class="co"># But this requires cloning the repos to your computer </span>
-<span class="co"># and then pushing all the files to the repos.</span>
-<span class="co"># </span>
-<span class="co">#res &lt;- purrr::map2(repo_create_df_new$name, repo_create_df_new$description, dwv_create_repo)</span>
-
-<span class="co"># this status just creates </span>
+<span class="co"># this just makes sure the repos were created.</span>
 <span class="kw">status</span> <span class="op">&lt;-</span> <span class="kw">repo_create_df_new</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span>(cr_success = <span class="fu">map_lgl</span>(<span class="fu">transpose</span>(<span class="kw">res</span>)<span class="op">$</span><span class="kw">result</span>, <span class="fu"><a href="https://rdrr.io/r/base/funprog.html">Negate</a></span>(<span class="kw">is.null</span>))) <span class="op">%&gt;%</span>
   <span class="fu">select</span>(<span class="op">-</span><span class="kw">description</span>)
@@ -271,31 +275,45 @@
 <div id="sharing-and-permissions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#sharing-and-permissions" class="anchor"></a>Sharing and Permissions</h3>
-<p>Now invite the students to the team for this semester’s class. You will need to invite the TAs to the ta group. The TAs have read write priveledges. The student group only has read permissions.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
+<p>Now invite the students to the team for this semester’s class. The student group only has read permissions.</p>
+<p><strong>You will need to invite the TAs to the ta group manually</strong>. Currently done manually <a href="https://github.com/orgs/BYUI335/teams">here</a>. The TAs have read/write privileges.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="co"># invites students into the class semester group</span>
 <span class="fu"><a href="../reference/dwv_invite_group.html">dwv_invite_group</a></span>(<span class="kw">repo_create_df_new</span>, <span class="kw">students_team_id</span>)
+
+<span class="co"># Gives student read/write access to their repo.</span>
 <span class="fu"><a href="../reference/dwv_add_student.html">dwv_add_student</a></span>(<span class="kw">repo_create_df_new</span>)
+
+<span class="co"># Adds class group to all the student repos for the semester</span>
 <span class="fu"><a href="../reference/dwv_add_group.html">dwv_add_group</a></span>(<span class="kw">repo_create_df_new</span>, <span class="st">"pull"</span>, <span class="kw">students_team_id</span>)
+
+<span class="co"># Adds the TA group to all the repos for the semester</span>
 <span class="fu"><a href="../reference/dwv_add_group.html">dwv_add_group</a></span>(<span class="kw">repo_create_df_new</span>, <span class="st">"admin"</span>, <span class="kw">ta_team_id</span>)
+
+<span class="co"># removes the teacher or creator from getting emails.</span>
 <span class="fu"><a href="../reference/dwv_remove_watching.html">dwv_remove_watching</a></span>(<span class="kw">repo_create_df_new</span>) <span class="co"># run authenticad as user.</span>
+
+<span class="co">## look at all the repos associated with this team</span>
 <span class="fu"><a href="../reference/dwv_team_repos.html">dwv_team_repos</a></span>(<span class="kw">students_team_id</span>)
 </pre></div>
-<p>Make sure to add TAs to TA group. Currently done manually <a href="https://github.com/orgs/BYUI335/teams">here</a>.</p>
 </div>
 <div id="creating-issues" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-issues" class="anchor"></a>Creating Issues</h3>
 <p>If you are using GitHub for the students to manage their progress then you will need to create issues and push the tasks into them. It is built to pull informatin from an md file of the <a href="https://byuistats.github.io/M335/tasklist.md">following format</a>.</p>
-<p>The below code will push issues to each repository provided in the tibble.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
+<div class="sourceCode" id="cb13"><pre class="downlit">
 <span class="kw">body_lines</span> <span class="op">=</span> <span class="fu">read_lines</span>(<span class="st">"https://byuistats.github.io/M335/tasklist.md"</span>)
+</pre></div>
+<p>The below code will push issues to each repository provided in the tibble. Run them in the following order to get the issues to show up in a clean viewable order.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="co"># Create the case study (cs) issues. One for each case study</span>
+<span class="fu"><a href="../reference/dwv_issue_cs.html">dwv_issue_cs</a></span>(<span class="kw">body_lines</span>, dat = <span class="kw">repo_create_df_new</span>)
 
-<span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="kw">repo_create_df_new</span>, <span class="kw">gitName</span> <span class="op">==</span> <span class="st">"hathawayj"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/dwv_issue_cs.html">dwv_issue_cs</a></span>(<span class="kw">body_lines</span>, dat = <span class="kw">.</span>)
-<span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="kw">repo_create_df_new</span>, <span class="kw">gitName</span> <span class="op">==</span> <span class="st">"hathawayj"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/dwv_issue_tasks.html">dwv_issue_tasks</a></span>(<span class="kw">body_lines</span>, dat = <span class="kw">.</span>)
-<span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="kw">repo_create_df_new</span>, <span class="kw">gitName</span> <span class="op">==</span> <span class="st">"hathawayj"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/dwv_issue_semester.html">dwv_issue_semester</a></span>(<span class="kw">body_lines</span>, dat = <span class="kw">.</span>)
+<span class="co"># Create one issue with all of the class task project tasks in it.</span>
+<span class="fu"><a href="../reference/dwv_issue_tasks.html">dwv_issue_tasks</a></span>(<span class="kw">body_lines</span>, dat = <span class="kw">repo_create_df_new</span>)
+
+<span class="co"># Create one issue with all the semester level items.  Leadership, cover letter</span>
+<span class="fu"><a href="../reference/dwv_issue_semester.html">dwv_issue_semester</a></span>(<span class="kw">body_lines</span>, dat = <span class="kw">repo_create_df_new</span>)
 </pre></div>
 </div>
 </div>
