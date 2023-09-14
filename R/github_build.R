@@ -53,7 +53,7 @@ dwv_create_repo <- function(name, description) {
 #' Copy from template repo
 #' @export
 dwv_copy_repo <- function(name, description) {
-  safe_gh("POST /repos/BYUI335/M335_Template/generate", owner = "BYUI335",
+  safe_gh("POST /repos/BYUI335/DS350_Template/generate", owner = "BYUI335",
           name = name, description = description, private = TRUE,
           .accept = "application/vnd.github.baptiste-preview+json")
 }
